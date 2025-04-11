@@ -1,0 +1,104 @@
+class ArrayStack:
+    def __init__(self):
+        self.stack = []
+
+    def is_empty(self):
+        return not self.stack
+
+    def push(self, item):
+        self.stack.append(item)
+
+    def pop(self):
+        if self.is_empty():
+            raise Exception("스택 언더플로우")
+        return self.stack.pop()
+
+    def peek(self):
+        if self.is_empty():
+            raise Exception("스택 언더플로우")
+        return self.stack[-1]
+
+    def __len__(self):
+        return len(self.stack)
+
+
+def precedence(op):
+    if op == '(' or op == ')':
+        return 0
+    elif op in ['+', '-']:
+        return 1
+    elif op in ['*', '/']:
+        return 2
+    return -1
+
+
+def is_operator(token):
+    return token in '+-*/'
+
+
+def infix_to_postfix(expr):
+    s = ArrayStack()
+    output = []
+    prev_token = None
+
+    for token in expr.split():
+        if token.replace('.', '', 1).isdigit():  # 피연산자
+            output.append(token)
+        elif token == '(':
+            s.push(token)
+        elif token == ')':
+            while not s.is_empty() and s.peek() != '(':
+                output.append(s.pop())
+            if s.is_empty():
+                raise Exception("Error: 괄호가 잘못되었습니다.")
+            s.pop()  # '(' 제거
+        elif is_operator(token):
+            # 연산자 연속 체크
+            if prev_token is None or is_operator(prev_token):
+                raise Exception("Error: 잘못된 연산자 사용.")
+            while not s.is_empty() and precedence(s.peek()) >= precedence(token):
+                output.append(s.pop())
+            s.push(token)
+        else:
+            raise Exception(f"Error: 알 수 없는 토큰 '{token}'")
+        prev_token = token
+
+    if is_operator(prev_token):
+        raise Exception("Error: 수식이 연산자로 끝납니다.")
+
+    while not s.is_empty():
+        if s.peek() == '(':
+            raise Exception("Error: 괄호가 잘못되었습니다.")
+        output.append(s.pop())
+
+    return output
+
+
+def evaluate_postfix(postfix):
+    s = ArrayStack()
+    for token in postfix:
+        if token.replace('.', '', 1).isdigit():
+            s.push(float(token))
+        elif is_operator(token):
+            b = s.pop()
+            a = s.pop()
+            if token == '+': s.push(a + b)
+            elif token == '-': s.push(a - b)
+            elif token == '*': s.push(a * b)
+            elif token == '/': s.push(a / b)
+    return s.pop()
+
+
+def main():
+    try:
+        expr = input("Infix 수식을 입력하세요 (공백으로 구분): ")
+        postfix = infix_to_postfix(expr)
+        print("Postfix:", ' '.join(postfix))
+        result = evaluate_postfix(postfix)
+        print("결과:", result)
+    except Exception as e:
+        print(e)
+
+
+if __name__ == "__main__":
+    main()
