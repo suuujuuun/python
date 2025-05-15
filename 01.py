@@ -1,5 +1,3 @@
-#put 5, answer 120{1*2*3*4*5}
-
 def recursion(fac_number):
     
     if fac_number < 0:
@@ -10,7 +8,30 @@ def recursion(fac_number):
 
     return recursion(fac_number-1) * fac_number
 
+def calculator(K):
 
-a = 5
-print(recursion(a))
+    a = str(input("연산자를 선택하세요 : "))
+
+    if a == '+':
+        b = int(input(f"{K}{a}?"))
+        a = K + b
+    elif a == '-':
+        b = int(input(f"{K}{a}?"))
+        a = K - b
+        pass
+    elif a == '*':
+        b = int(input(f"{K}{a}?"))
+        a = K * b
+        pass
+    elif a == '/':
+        b = int(input(f"{K}{a}?"))
+        a = K / b
+        pass
+    else:
+        print("연산자가 옳지 않습니다. 재실행 해주세요")
+
+    return a
+
+print(calculator(4))
+
 
