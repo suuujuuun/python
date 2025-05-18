@@ -18,15 +18,12 @@ def calculator(K):
     elif a == '-':
         b = int(input(f"{K}{a}?"))
         a = K - b
-        pass
     elif a == '*':
         b = int(input(f"{K}{a}?"))
         a = K * b
-        pass
     elif a == '/':
         b = int(input(f"{K}{a}?"))
         a = K / b
-        pass
     else:
         print("연산자가 옳지 않습니다. 재실행 해주세요")
 
@@ -34,4 +31,5 @@ def calculator(K):
 
 print(calculator(4))
 
+ㅇdsdf
 
